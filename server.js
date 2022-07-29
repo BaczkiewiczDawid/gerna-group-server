@@ -17,7 +17,7 @@ db.connect();
 
 app.get("/top-selling-models", (req, res) => {
   const getTopSellingModels =
-    "SELECT gerna_cars.manufactuer, gerna_cars.model, gerna_cars.price, count(gerna_cars.id) as sales FROM gerna_sales, gerna_cars WHERE gerna_sales.model = gerna_cars.id GROUP BY gerna_cars.id LIMIT 10";
+    "SELECT gerna_cars.manufactuer, gerna_cars.model, gerna_cars.price, count(gerna_cars.id) as sales FROM gerna_sales, gerna_cars WHERE gerna_sales.model = gerna_cars.id GROUP BY gerna_cars.id ORDER BY sales DESC LIMIT 10";
 
   db.query(getTopSellingModels, (err, result) => {
     if (err) {
