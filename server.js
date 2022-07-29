@@ -21,13 +21,26 @@ app.get("/top-selling-models", (req, res) => {
 
   db.query(getTopSellingModels, (err, result) => {
     if (err) {
-      throw err;
+      console.log(err)
     } else {
       console.log(result);
       res.send(result);
     }
   });
 });
+
+app.get('/top-salers', (req, res) => {
+  const getTopSalers = 'SELECT gerna_employees.id, gerna_employees.name, count(gerna_sales.saler) as totalSales, sum(gerna_cars.price) as totalIncome FROM gerna_sales, gerna_employees, gerna_cars WHERE gerna_cars.id = gerna_sales.model GROUP BY gerna_employees.id ORDER BY totalSales DESC LIMIT 10';
+
+  db.query(getTopSalers, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+      console.log(result);
+    }
+  })
+})
 
 console.log("Server running");
 
