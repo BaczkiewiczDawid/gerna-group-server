@@ -30,7 +30,7 @@ app.get("/top-selling-models", (req, res) => {
 });
 
 app.get('/top-salers', (req, res) => {
-  const getTopSalers = 'SELECT gerna_employees.id, gerna_employees.name, count(gerna_sales.saler) as totalSales, sum(gerna_cars.price) as totalIncome FROM gerna_sales, gerna_employees, gerna_cars WHERE gerna_cars.id = gerna_sales.model GROUP BY gerna_employees.id ORDER BY totalSales DESC LIMIT 10';
+  const getTopSalers = 'SELECT gerna_employees.id, gerna_employees.name, count(gerna_sales.saler) as totalSales, sum(gerna_cars.price) as totalIncome FROM gerna_sales, gerna_employees, gerna_cars WHERE gerna_cars.id = gerna_sales.model AND gerna_sales.saler = gerna_employees.id GROUP BY gerna_employees.id ORDER BY totalSales DESC LIMIT 10';
 
   db.query(getTopSalers, (err, result) => {
     if (err) {
