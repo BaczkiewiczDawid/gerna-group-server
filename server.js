@@ -3,8 +3,11 @@ const app = express();
 const mysql = require("mysql");
 const cors = require("cors");
 require("dotenv").config();
+const bodyParser = require("body-parser");
 
 app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 const db = mysql.createConnection({
   host: process.env.HOST,
@@ -21,15 +24,16 @@ app.get("/top-selling-models", (req, res) => {
 
   db.query(getTopSellingModels, (err, result) => {
     if (err) {
-      console.log(err)
+      console.log(err);
     } else {
       res.send(result);
     }
   });
 });
 
-app.get('/top-salers', (req, res) => {
-  const getTopSalers = 'SELECT gerna_employees.id, gerna_employees.name, count(gerna_sales.saler) as totalSales, sum(gerna_cars.price) as totalIncome FROM gerna_sales, gerna_employees, gerna_cars WHERE gerna_cars.id = gerna_sales.model AND gerna_sales.saler = gerna_employees.id GROUP BY gerna_employees.id ORDER BY totalSales DESC LIMIT 10';
+app.get("/top-salers", (req, res) => {
+  const getTopSalers =
+    "SELECT gerna_employees.id, gerna_employees.name, count(gerna_sales.saler) as totalSales, sum(gerna_cars.price) as totalIncome FROM gerna_sales, gerna_employees, gerna_cars WHERE gerna_cars.id = gerna_sales.model AND gerna_sales.saler = gerna_employees.id GROUP BY gerna_employees.id ORDER BY totalSales DESC LIMIT 10";
 
   db.query(getTopSalers, (err, result) => {
     if (err) {
@@ -37,11 +41,11 @@ app.get('/top-salers', (req, res) => {
     } else {
       res.send(result);
     }
-  })
-})
+  });
+});
 
-app.get('/employees-list', (req, res) => {
-  const getEmployeesList = 'SELECT * FROM gerna_employees';
+app.get("/employees-list", (req, res) => {
+  const getEmployeesList = "SELECT id, name, age, position FROM gerna_employees";
 
   db.query(getEmployeesList, (err, result) => {
     if (err) {
@@ -49,8 +53,24 @@ app.get('/employees-list', (req, res) => {
     } else {
       res.send(result);
     }
-  })
-})
+  });
+});
+
+app.post("/employee-details", (req, res) => {
+  const selectedUser = req.body.selectedUser;
+
+  console.log(selectedUser);
+
+  const getEmployeeDetails = `SELECT * FROM gerna_employees WHERE id = ${selectedUser}`;
+
+  db.query(getEmployeeDetails, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
 
 console.log("Server running");
 
