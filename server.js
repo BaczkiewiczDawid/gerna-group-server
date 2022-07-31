@@ -23,7 +23,6 @@ app.get("/top-selling-models", (req, res) => {
     if (err) {
       console.log(err)
     } else {
-      console.log(result);
       res.send(result);
     }
   });
@@ -37,7 +36,18 @@ app.get('/top-salers', (req, res) => {
       console.log(err);
     } else {
       res.send(result);
-      console.log(result);
+    }
+  })
+})
+
+app.get('/employees-list', (req, res) => {
+  const getEmployeesList = 'SELECT * FROM gerna_employees';
+
+  db.query(getEmployeesList, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
     }
   })
 })
