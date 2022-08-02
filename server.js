@@ -50,6 +50,10 @@ function handleDisconnect() {
 
 handleDisconnect();
 
+setInterval(function () {
+  db.query('SELECT 1');
+}, 5000);
+
 app.get("/top-selling-models", (req, res) => {
   const getTopSellingModels =
     "SELECT gerna_cars.id, gerna_cars.manufactuer, gerna_cars.model, gerna_cars.price, count(gerna_cars.id) as sales FROM gerna_sales, gerna_cars WHERE gerna_sales.model = gerna_cars.id GROUP BY gerna_cars.id ORDER BY sales DESC LIMIT 10";
@@ -76,8 +80,10 @@ app.get("/top-salers", (req, res) => {
   });
 });
 
-app.get("/employees-list", (req, res) => {
-  const getEmployeesList = "SELECT id, name, age, position FROM gerna_employees";
+app.post("/employees-list", (req, res) => {
+  const department = req.body.department
+
+  const getEmployeesList = `SELECT id, name, age, position FROM gerna_employees WHERE department = '${department}'`;
 
   db.query(getEmployeesList, (err, result) => {
     if (err) {
