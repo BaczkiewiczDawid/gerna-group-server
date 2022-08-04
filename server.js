@@ -112,6 +112,20 @@ app.post("/update-employee-information", (req, res) => {
   })
 });
 
+app.post('/new-employee', (req, res) => {
+  const employeeData = req.body.data;
+
+  const addNewEmployee = `INSERT INTO gerna_employees VALUES(null, '${employeeData.name}', '${employeeData.age}', '${employeeData.position}', '${employeeData.address}', '${employeeData.city}', '${employeeData.phone_number}', '${employeeData.email}', '${employeeData.salary}', '${employeeData.department}')`;
+
+  db.query(addNewEmployee, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  })
+})
+
 console.log("Server running");
 
 app.listen(3001);
