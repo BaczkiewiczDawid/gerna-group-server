@@ -23,11 +23,10 @@ function handleDisconnect() {
 
   db.connect(function (err) {
     if (err) {
-      
       console.log("error when connecting to db:", err);
       setTimeout(handleDisconnect, 2000);
-    } 
-  }); 
+    }
+  });
   db.on("error", function (err) {
     console.log("db error", err);
     if (err.code === "PROTOCOL_CONNECTION_LOST") {
@@ -109,10 +108,10 @@ app.post("/update-employee-information", (req, res) => {
     } else {
       res.send(result);
     }
-  })
+  });
 });
 
-app.post('/new-employee', (req, res) => {
+app.post("/new-employee", (req, res) => {
   const employeeData = req.body.data;
 
   const addNewEmployee = `INSERT INTO gerna_employees VALUES(null, '${employeeData.name}', '${employeeData.age}', '${employeeData.position}', '${employeeData.address}', '${employeeData.city}', '${employeeData.phone_number}', '${employeeData.email}', '${employeeData.salary}', '${employeeData.department}')`;
@@ -123,8 +122,20 @@ app.post('/new-employee', (req, res) => {
     } else {
       res.send(result);
     }
-  })
-})
+  });
+});
+
+app.get("/get-cars", (req, res) => {
+  const getCarsList = `SELECT * FROM gerna_cars`;
+
+  db.query(getCarsList, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
 
 console.log("Server running");
 
