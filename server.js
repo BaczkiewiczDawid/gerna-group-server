@@ -137,6 +137,21 @@ app.get("/get-cars", (req, res) => {
   });
 });
 
+app.post("/get-sales", (req, res) => {
+  const carID = req.body.data;
+
+  const getSales = `SELECT count(gerna_cars.id) as sales FROM gerna_cars, gerna_sales WHERE gerna_cars.id = gerna_sales.model AND gerna_cars.id = ${carID}`;
+
+  db.query(getSales, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+      console.log(result);
+    }
+  });
+});
+
 console.log("Server running");
 
 app.listen(3001);
