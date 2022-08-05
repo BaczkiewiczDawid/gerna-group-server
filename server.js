@@ -176,6 +176,18 @@ app.get("/total-income", (req, res) => {
   });
 });
 
+app.get("/recent-income", (req, res) => {
+  const getRecentIncome = `SELECT sum(gerna_cars.price) as totalIncome, count(DATE_FORMAT(date, '%Y-%m-%d')) as sales FROM gerna_sales, gerna_employees, gerna_cars WHERE gerna_cars.id = gerna_sales.model AND gerna_sales.saler = gerna_employees.id AND date BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE()`;
+
+  db.query(getRecentIncome, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 console.log("Server running");
 
 app.listen(3001);
