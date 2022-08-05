@@ -164,6 +164,18 @@ app.get("/recent-sales", (req, res) => {
   });
 });
 
+app.get("/total-income", (req, res) => {
+  const getTotalIncome = `SELECT sum(gerna_cars.price) as totalIncome FROM gerna_sales, gerna_employees, gerna_cars WHERE gerna_cars.id = gerna_sales.model AND gerna_sales.saler = gerna_employees.id`;
+
+  db.query(getTotalIncome, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 console.log("Server running");
 
 app.listen(3001);
