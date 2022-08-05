@@ -152,6 +152,18 @@ app.post("/get-sales", (req, res) => {
   });
 });
 
+app.get("/recent-sales", (req, res) => {
+  const getRecentSales = `SELECT count(DATE_FORMAT(date, '%Y-%m-%d')) as sales FROM gerna_sales WHERE date BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE()`;
+
+  db.query(getRecentSales, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 console.log("Server running");
 
 app.listen(3001);
