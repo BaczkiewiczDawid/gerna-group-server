@@ -119,6 +119,8 @@ app.post("/new-employee", (req, res) => {
   db.query(addNewEmployee, (err, result) => {
     if (err) {
       console.log(err);
+      res.status(400)
+      res.send(result)
     } else {
       res.send(result);
     }
