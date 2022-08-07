@@ -119,8 +119,8 @@ app.post("/new-employee", (req, res) => {
   db.query(addNewEmployee, (err, result) => {
     if (err) {
       console.log(err);
-      res.status(400)
-      res.send(result)
+      res.status(400);
+      res.send(result);
     } else {
       res.send(result);
     }
@@ -182,6 +182,20 @@ app.get("/recent-income", (req, res) => {
   const getRecentIncome = `SELECT sum(gerna_cars.price) as totalIncome, count(DATE_FORMAT(date, '%Y-%m-%d')) as sales FROM gerna_sales, gerna_employees, gerna_cars WHERE gerna_cars.id = gerna_sales.model AND gerna_sales.saler = gerna_employees.id AND date BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE()`;
 
   db.query(getRecentIncome, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+app.post("/delete-employee", (req, res) => {
+  const employeeID = req.body.id;
+
+  const deleteEmployee = `DELETE FROM gerna_employees WHERE id = ${employeeID}`;
+
+  db.query(deleteEmployee, (err, result) => {
     if (err) {
       console.log(err);
     } else {
