@@ -204,6 +204,20 @@ app.post("/delete-employee", (req, res) => {
   });
 });
 
+app.post("/car-details", (req, res) => {
+  const carID = req.body.id;
+
+  const getCarDetails = `SELECT * FROM gerna_cars WHERE id = ${carID}`;
+
+  db.query(getCarDetails, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 console.log("Server running");
 
 app.listen(3001);
