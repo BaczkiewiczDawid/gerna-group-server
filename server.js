@@ -4,6 +4,7 @@ const mysql = require("mysql");
 const cors = require("cors");
 require("dotenv").config();
 const bodyParser = require("body-parser");
+const e = require("express");
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -217,6 +218,21 @@ app.post("/car-details", (req, res) => {
     }
   });
 });
+
+app.post('/new-car', (req, res) => {
+  const data = req.body.data;
+
+  const addNewCar = `INSERT INTO gerna_cars VALUES(null, '${data.manufactuer}', '${data.model}', ${data.price}, '${data.engine}')`;
+
+  db.query(addNewCar, (err, result) => {
+    if (err) {
+      console.log(err)
+    } else {
+      res.send(result);
+      console.log(result)
+    }
+  })
+})
 
 console.log("Server running");
 
