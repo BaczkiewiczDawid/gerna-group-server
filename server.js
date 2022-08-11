@@ -219,20 +219,22 @@ app.post("/car-details", (req, res) => {
   });
 });
 
-app.post('/new-car', (req, res) => {
+app.post("/new-car", (req, res) => {
   const data = req.body.data;
 
-  const addNewCar = `INSERT INTO gerna_cars VALUES(null, '${data.manufactuer}', '${data.model}', ${data.price}, '${data.engine}')`;
+  console.log(JSON.stringify(data.equipment))
+
+  const addNewCar = `INSERT INTO gerna_cars VALUES(null, '${data.manufactuer}', '${data.model}', ${data.price}, '${data.engine}', '${JSON.stringify(data.equipment)}')`;
 
   db.query(addNewCar, (err, result) => {
     if (err) {
-      console.log(err)
+      console.log(err);
     } else {
       res.send(result);
-      console.log(result)
+      console.log(result);
     }
-  })
-})
+  });
+});
 
 console.log("Server running");
 
