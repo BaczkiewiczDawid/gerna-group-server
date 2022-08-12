@@ -236,6 +236,24 @@ app.post("/new-car", (req, res) => {
   });
 });
 
+app.post('/new-sale', (req, res) => {
+  const data = req.body.data
+
+  let currentDate = new Date().toJSON().slice(0, 10);
+
+  console.log(currentDate)
+
+  const newSale = `INSERT INTO gerna_sales VALUES(null, ${data.car}, ${data.saler}, '${currentDate}')`;
+
+  db.query(newSale, (err, result) => {
+    if (err) {
+      console.log(err)
+    } else {
+      res.send(result)
+    }
+  })
+})
+
 console.log("Server running");
 
 app.listen(3001);
