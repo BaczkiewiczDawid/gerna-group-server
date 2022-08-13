@@ -222,9 +222,13 @@ app.post("/car-details", (req, res) => {
 app.post("/new-car", (req, res) => {
   const data = req.body.data;
 
-  console.log(JSON.stringify(data.equipment))
+  console.log(JSON.stringify(data.equipment));
 
-  const addNewCar = `INSERT INTO gerna_cars VALUES(null, '${data.manufactuer}', '${data.model}', ${data.price}, '${data.engine}', '${JSON.stringify(data.equipment)}')`;
+  const addNewCar = `INSERT INTO gerna_cars VALUES(null, '${
+    data.manufactuer
+  }', '${data.model}', ${data.price}, '${data.engine}', '${JSON.stringify(
+    data.equipment
+  )}')`;
 
   db.query(addNewCar, (err, result) => {
     if (err) {
@@ -236,23 +240,35 @@ app.post("/new-car", (req, res) => {
   });
 });
 
-app.post('/new-sale', (req, res) => {
-  const data = req.body.data
+app.post("/new-sale", (req, res) => {
+  const data = req.body.data;
 
   let currentDate = new Date().toJSON().slice(0, 10);
-
-  console.log(currentDate)
 
   const newSale = `INSERT INTO gerna_sales VALUES(null, ${data.car}, ${data.saler}, '${currentDate}')`;
 
   db.query(newSale, (err, result) => {
     if (err) {
-      console.log(err)
+      console.log(err);
     } else {
-      res.send(result)
+      res.send(result);
     }
-  })
-})
+  });
+});
+
+app.post("/remove-car", (req, res) => {
+  const carID = req.body.carID;
+
+  const removeCar = `DELETE FROM gerna_cars WHERE id = ${carID}`;
+
+  db.query(removeCar, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
 
 console.log("Server running");
 
