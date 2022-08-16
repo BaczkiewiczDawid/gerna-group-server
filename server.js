@@ -73,7 +73,7 @@ app.get("/top-salers", (req, res) => {
 app.post("/employees-list", (req, res) => {
   const department = req.body.department;
 
-  const getEmployeesList = `SELECT id, name, age, position FROM gerna_employees WHERE department = '${department}'`;
+  const getEmployeesList = `SELECT id, name, age, position, city FROM gerna_employees WHERE department = '${department}'`;
 
   db.query(getEmployeesList, (err, result) => {
     if (err) {
@@ -269,6 +269,29 @@ app.post("/remove-car", (req, res) => {
     }
   });
 });
+
+app.post('/login', (req, res) => {
+  const userData = req.body.userData;
+
+  const login = `SELECT * FROM gerna_accounts WHERE email = '${userData.email}'`;
+
+  db.query(login, (err, result) => {
+    if (err) {
+      console.log(err)
+    } else {
+      if (result.length > 0) {
+        if (result[0].password = userData.password) {
+          const auth = {
+            authToken: 1,
+            authUser: userData.email
+          }
+
+          res.send(auth)
+        }
+      }
+    }
+  })
+})
 
 console.log("Server running");
 
