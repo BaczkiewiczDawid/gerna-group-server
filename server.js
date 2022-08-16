@@ -5,6 +5,8 @@ const cors = require("cors");
 require("dotenv").config();
 const bodyParser = require("body-parser");
 const e = require("express");
+const bcrypt = require('bcrypt');
+const { resolveSoa } = require("dns");
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -115,17 +117,27 @@ app.post("/update-employee-information", (req, res) => {
 app.post("/new-employee", (req, res) => {
   const employeeData = req.body.data;
 
-  const addNewEmployee = `INSERT INTO gerna_employees VALUES(null, '${employeeData.name}', '${employeeData.age}', '${employeeData.position}', '${employeeData.address}', '${employeeData.city}', '${employeeData.phone_number}', '${employeeData.email}', '${employeeData.salary}', '${employeeData.department}')`;
+  const randomPassword = Math.random().toString(36).slice(-8);
+  const hashedPassword = bcrypt.hashSync(randomPassword, 10);
 
+  const addNewEmployee = `INSERT INTO gerna_employees VALUES(null, '${employeeData.name}', '${employeeData.age}', '${employeeData.position}', '${employeeData.address}', '${employeeData.city}', '${employeeData.phone_number}', '${employeeData.email}', '${employeeData.salary}', '${employeeData.department}')`;
+  const createUser = `INSERT INTO gerna_accounts VALUES(null, '${employeeData.name}', '${employeeData.email}', '${hashedPassword}', 'employee')`;
+  
   db.query(addNewEmployee, (err, result) => {
     if (err) {
       console.log(err);
       res.status(400);
       res.send(result);
+    }
+  });
+
+  db.query(createUser, (err, result) => {
+    if (err) {
+      console.log(err)
     } else {
       res.send(result);
     }
-  });
+  })
 });
 
 app.get("/get-cars", (req, res) => {
@@ -280,7 +292,9 @@ app.post('/login', (req, res) => {
       console.log(err)
     } else {
       if (result.length > 0) {
-        if (result[0].password = userData.password) {
+        const isPasswordMatch = bcrypt.compareSync(userData.password, result[0].password)
+
+        if (isPasswordMatch === true) {
           const auth = {
             authenticated: true,
             authUser: userData.email,
