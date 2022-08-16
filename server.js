@@ -282,8 +282,9 @@ app.post('/login', (req, res) => {
       if (result.length > 0) {
         if (result[0].password = userData.password) {
           const auth = {
-            authToken: 1,
-            authUser: userData.email
+            authenticated: true,
+            authUser: userData.email,
+            role: result[0].role
           }
 
           res.send(auth)
