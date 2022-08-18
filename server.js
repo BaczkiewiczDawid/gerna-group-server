@@ -4,9 +4,8 @@ const mysql = require("mysql");
 const cors = require("cors");
 require("dotenv").config();
 const bodyParser = require("body-parser");
-const e = require("express");
-const bcrypt = require('bcrypt');
-const { resolveSoa } = require("dns");
+const bcrypt = require("bcrypt");
+const nodemailer = require("nodemailer");
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -122,22 +121,24 @@ app.post("/new-employee", (req, res) => {
 
   const addNewEmployee = `INSERT INTO gerna_employees VALUES(null, '${employeeData.name}', '${employeeData.age}', '${employeeData.position}', '${employeeData.address}', '${employeeData.city}', '${employeeData.phone_number}', '${employeeData.email}', '${employeeData.salary}', '${employeeData.department}')`;
   const createUser = `INSERT INTO gerna_accounts VALUES(null, '${employeeData.name}', '${employeeData.email}', '${hashedPassword}', 'employee')`;
-  
+
+  console.log(randomPassword);
+
   db.query(addNewEmployee, (err, result) => {
     if (err) {
       console.log(err);
       res.status(400);
-      res.send(result);
     }
   });
 
   db.query(createUser, (err, result) => {
     if (err) {
-      console.log(err)
+      console.log(err);
     } else {
-      res.send(result);
+      res.send(randomPassword);
+      // res.send(result);
     }
-  })
+  });
 });
 
 app.get("/get-cars", (req, res) => {
@@ -282,31 +283,35 @@ app.post("/remove-car", (req, res) => {
   });
 });
 
-app.post('/login', (req, res) => {
+app.post("/login", (req, res) => {
   const userData = req.body.userData;
 
   const login = `SELECT * FROM gerna_accounts WHERE email = '${userData.email}'`;
 
   db.query(login, (err, result) => {
     if (err) {
-      console.log(err)
+      console.log(err);
     } else {
+      console.log(result);
       if (result.length > 0) {
-        const isPasswordMatch = bcrypt.compareSync(userData.password, result[0].password)
+        const isPasswordMatch = bcrypt.compareSync(
+          userData.password,
+          result[0].password
+        );
 
         if (isPasswordMatch === true) {
           const auth = {
             authenticated: true,
             authUser: userData.email,
-            role: result[0].role
-          }
+            role: result[0].role,
+          };
 
-          res.send(auth)
+          res.send(auth);
         }
       }
     }
-  })
-})
+  });
+});
 
 console.log("Server running");
 
