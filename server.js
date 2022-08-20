@@ -71,6 +71,18 @@ app.get("/top-salers", (req, res) => {
   });
 });
 
+app.get("/employees", (req, res) => {
+  const getEmployees = `SELECT email, name FROM gerna_employees`;
+
+  db.query(getEmployees, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 app.post("/employees-list", (req, res) => {
   const department = req.body.department;
 
@@ -311,6 +323,27 @@ app.post("/login", (req, res) => {
       }
     }
   });
+});
+
+app.post("/send-message", (req, res) => {
+  const data = req.body.data;
+
+  console.log(data);
+
+  data.emailsList.map((email) => {
+    const sendMessage = `INSERT INTO gerna_messages VALUES(null, '${email}', '${data.title}', '${data.description}')`;
+
+    console.log(sendMessage)
+    db.query(sendMessage, (err, result) => {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log('Messages sent successfully');
+      }
+    })
+  });
+
+  res.send('Messages sent successfully');
 });
 
 console.log("Server running");
