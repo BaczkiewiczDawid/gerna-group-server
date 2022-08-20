@@ -331,19 +331,33 @@ app.post("/send-message", (req, res) => {
   console.log(data);
 
   data.emailsList.map((email) => {
-    const sendMessage = `INSERT INTO gerna_messages VALUES(null, '${email}', '${data.title}', '${data.description}')`;
+    const sendMessage = `INSERT INTO gerna_messages VALUES(null, '${email}', '${data.title}', '${data.description}', '${data.date}', '${data.sender}')`;
 
-    console.log(sendMessage)
+    console.log(sendMessage);
     db.query(sendMessage, (err, result) => {
       if (err) {
-        console.log(err)
+        console.log(err);
       } else {
-        console.log('Messages sent successfully');
+        console.log("Messages sent successfully");
       }
-    })
+    });
   });
 
-  res.send('Messages sent successfully');
+  res.send("Messages sent successfully");
+});
+
+app.post("/get-messages", (req, res) => {
+  const user = req.body.user;
+
+  const getMessages = `SELECT * FROM gerna_messages WHERE email  = '${user}'`;
+
+  db.query(getMessages, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
 });
 
 console.log("Server running");
