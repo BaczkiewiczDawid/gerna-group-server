@@ -11,8 +11,6 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const port = 3001
-
 const db_config = {
   host: process.env.HOST,
   user: process.env.USER,
@@ -362,6 +360,6 @@ app.post("/get-messages", (req, res) => {
   });
 });
 
-console.log("Server running!");
+const port = process.env.PORT || 3000;
 
-app.listen(process.env.PORT || port);
+app.listen(port);
