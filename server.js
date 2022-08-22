@@ -42,7 +42,7 @@ setInterval(function () {
   db.query("SELECT 1");
 }, 5000);
 
-app.get('/', (req, res) => res.send('Hello world!'))
+app.get('/', (req, res) => res.send('Hello world'))
 
 app.get("/top-selling-models", (req, res) => {
   const getTopSellingModels =
