@@ -362,6 +362,6 @@ app.post("/get-messages", (req, res) => {
   });
 });
 
-console.log("Server running");
+console.log("Server running!");
 
 app.listen(process.env.PORT || port);
