@@ -10,39 +10,46 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const db_config = {
-  host: process.env.HOST,
-  user: process.env.USER,
-  password: process.env.PASSWORD,
-  database: process.env.DB,
-};
+const db = mysql.createPool({
+  host: process.env.DB_SERVER,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+});
 
-let db;
+// const db_config = {
+//   host: process.env.HOST,
+//   user: process.env.USER,
+//   password: process.env.PASSWORD,
+//   database: process.env.DB,
+// };
 
-function handleDisconnect() {
-  db = mysql.createConnection(db_config);
+// let db;
 
-  db.connect(function (err) {
-    if (err) {
-      console.log("error when connecting to db:", err);
-      setTimeout(handleDisconnect, 2000);
-    }
-  });
-  db.on("error", function (err) {
-    console.log("db error", err);
-    if (err.code === "PROTOCOL_CONNECTION_LOST") {
-      handleDisconnect();
-    } else {
-      throw err;
-    }
-  });
-}
+// function handleDisconnect() {
+//   db = mysql.createConnection(db_config);
 
-handleDisconnect();
+//   db.connect(function (err) {
+//     if (err) {
+//       console.log("error when connecting to db:", err);
+//       setTimeout(handleDisconnect, 2000);
+//     }
+//   });
+//   db.on("error", function (err) {
+//     console.log("db error", err);
+//     if (err.code === "PROTOCOL_CONNECTION_LOST") {
+//       handleDisconnect();
+//     } else {
+//       throw err;
+//     }
+//   });
+// }
 
-setInterval(function () {
-  db.query("SELECT 1");
-}, 5000);
+// handleDisconnect();
+
+// setInterval(function () {
+//   db.query("SELECT 1");
+// }, 5000);
 
 app.get("/top-selling-models", (req, res) => {
   const getTopSellingModels =
