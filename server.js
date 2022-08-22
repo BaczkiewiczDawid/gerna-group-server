@@ -43,27 +43,6 @@ setInterval(function () {
   db.query("SELECT 1");
 }, 5000);
 
-const Sequelize = require('sequelize');
-require('dotenv').config();
-
-let sequelize;
-
-// when deployed on Heroku
-if (process.env.JAWSDB_URL) {
-    sequelize = new Sequelize(process.env.JAWSDB_URL);
-} else {
-    // localhost
-    sequelize = new Sequelize(process.env.DB_NAME, 
-    process.env.DB_USER, 
-    process.env.DB_PASSWORD, {
-        host: 'localhost',
-        dialect: 'mysql',
-        port: 3306
-    });
-}
-
-module.exports = sequelize;
-
 app.get('/', (req, res) => res.send('Hello world'))
 
 app.get("/top-selling-models", (req, res) => {
