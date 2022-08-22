@@ -5,11 +5,17 @@ const cors = require("cors");
 require("dotenv").config();
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
-const nodemailer = require("nodemailer");
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("build"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname,  "build", "index.html"));
+  });
+}
 
 const db_config = {
   host: process.env.HOST,
