@@ -83,9 +83,9 @@ app.get("/employees", (req, res) => {
 });
 
 app.post("/employees-list", (req, res) => {
-  const data = req.body.department;
+  const department = req.body.data;
 
-  const getEmployeesList = `SELECT id, name, age, position, city FROM gerna_employees WHERE department = '${data}'`;
+  const getEmployeesList = `SELECT id, name, age, position, city FROM gerna_employees WHERE department = '${department}'`;
 
   db.query(getEmployeesList, (err, result) => {
     if (err) {
