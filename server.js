@@ -17,7 +17,6 @@ const db_config = {
   database: process.env.DB,
 };
 
-
 let db;
 
 function handleDisconnect() {
@@ -43,7 +42,7 @@ setInterval(function () {
   db.query("SELECT 1");
 }, 5000);
 
-app.get('/', (req, res) => res.send('Hello world!'))
+app.get("/", (req, res) => res.send("Hello world!"));
 
 app.get("/top-selling-models", (req, res) => {
   const getTopSellingModels =
@@ -351,6 +350,18 @@ app.post("/get-messages", (req, res) => {
   const getMessages = `SELECT * FROM gerna_messages WHERE email  = '${user}'`;
 
   db.query(getMessages, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+app.get("/news", (req, res) => {
+  const getNews = "SELECT * FROM gerna_news";
+
+  db.query(getNews, (err, result) => {
     if (err) {
       console.log(err);
     } else {
