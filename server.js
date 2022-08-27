@@ -11,14 +11,14 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const corsOptions = {
-  origin: process.env.PORT | port,
+  origin: 'https://gernagroup-server.herokuapp.com/',
   credentials: true,
   optionSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
 
 const db_config = {
-  host: 'https://gernagroup-server.herokuapp.com/',
+  host: process.env.HOST,
   user: process.env.USER,
   password: process.env.PASSWORD,
   database: process.env.DB,
