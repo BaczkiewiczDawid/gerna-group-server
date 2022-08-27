@@ -44,11 +44,6 @@ setInterval(function () {
   db.query("SELECT 1");
 }, 5000);
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  next();
-});
-
 app.get("/", (req, res) => res.send("Hello world!"));
 
 app.get("/top-selling-models", (req, res) => {
