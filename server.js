@@ -10,12 +10,7 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const corsOptions = {
-  origin: 'https://gernagroup-server.herokuapp.com/',
-  credentials: true,
-  optionSuccessStatus: 200,
-};
-app.use(cors(corsOptions));
+app.use(cors);
 
 const db_config = {
   host: process.env.HOST,
