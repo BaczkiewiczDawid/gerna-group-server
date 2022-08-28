@@ -97,7 +97,7 @@ app.post("/employees-list", (req, res) => {
 });
 
 app.post("/employee-details", (req, res) => {
-  const selectedUser = req.body.selectedUser;
+  const selectedUser = req.body.data;
 
   const getEmployeeDetails = `SELECT * FROM gerna_employees WHERE id = ${selectedUser}`;
 
@@ -215,7 +215,7 @@ app.get("/recent-income", (req, res) => {
 });
 
 app.post("/delete-employee", (req, res) => {
-  const employeeID = req.body.id;
+  const employeeID = req.body.data;
 
   const deleteEmployee = `DELETE FROM gerna_employees WHERE id = ${employeeID}`;
 
@@ -229,7 +229,7 @@ app.post("/delete-employee", (req, res) => {
 });
 
 app.post("/car-details", (req, res) => {
-  const carID = req.body.id;
+  const carID = req.body.data;
 
   const getCarDetails = `SELECT * FROM gerna_cars WHERE id = ${carID}`;
 
@@ -280,7 +280,7 @@ app.post("/new-sale", (req, res) => {
 });
 
 app.post("/remove-car", (req, res) => {
-  const carID = req.body.carID;
+  const carID = req.body.data;
 
   const removeCar = `DELETE FROM gerna_cars WHERE id = ${carID}`;
 
@@ -294,7 +294,7 @@ app.post("/remove-car", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  const userData = req.body.userData;
+  const userData = req.body.data;
 
   const login = `SELECT * FROM gerna_accounts WHERE email = '${userData.email}'`;
 
