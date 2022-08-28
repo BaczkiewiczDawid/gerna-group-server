@@ -345,7 +345,7 @@ app.post("/send-message", (req, res) => {
 });
 
 app.post("/get-messages", (req, res) => {
-  const user = req.body.user;
+  const user = req.body.data;
 
   const getMessages = `SELECT * FROM gerna_messages WHERE email  = '${user}'`;
 
