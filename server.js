@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const mysql = require("mysql");
 const cors = require("cors");
-require("dotenv").config();
+// require("dotenv").config();
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 
@@ -10,12 +10,18 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// const db_config = {
+//   host: process.env.HOST,
+//   user: process.env.USER,
+//   password: process.env.PASSWORD,
+//   database: process.env.DB,
+// };
+
 const db_config = {
-  host: process.env.HOST,
-  user: process.env.USER,
-  password: process.env.PASSWORD,
-  database: process.env.DB,
-};
+  host: 'localhost',
+  user: 'root',
+  database: 'lepa70xfj1',
+}
 
 let db;
 
@@ -125,15 +131,13 @@ app.post("/update-employee-information", (req, res) => {
 });
 
 app.post("/new-employee", (req, res) => {
-  const employeeData = req.body.data;
-
   const randomPassword = Math.random().toString(36).slice(-8);
   const hashedPassword = bcrypt.hashSync(randomPassword, 10);
 
-  const addNewEmployee = `INSERT INTO gerna_employees VALUES(null, '${employeeData.name}', '${employeeData.age}', '${employeeData.position}', '${employeeData.address}', '${employeeData.city}', '${employeeData.phone_number}', '${employeeData.email}', '${employeeData.salary}', '${employeeData.department}')`;
-  const createUser = `INSERT INTO gerna_accounts VALUES(null, '${employeeData.name}', '${employeeData.email}', '${hashedPassword}', 'employee')`;
+  const employeeData = req.body.data;
 
-  console.log(randomPassword);
+  const addNewEmployee = `INSERT INTO gerna_employees VALUES(null, '${employeeData.name}', '${employeeData.age}', '${employeeData.position}', '${employeeData.address}', '${employeeData.city}', '${employeeData.phone_number}', '${employeeData.email}', '${employeeData.salary}', '${employeeData.department}')`;
+  const createUser = `INSERT INTO gerna_accounts VALUES(null, '${employeeData.name}', '${employeeData.email}', '${hashedPassword}', 'employee' )`;
 
   db.query(addNewEmployee, (err, result) => {
     if (err) {
@@ -165,6 +169,7 @@ app.get("/get-cars", (req, res) => {
 
 app.post("/get-sales", (req, res) => {
   const carID = req.body.data;
+  console.log(carID)
 
   const getSales = `SELECT count(gerna_cars.id) as sales FROM gerna_cars, gerna_sales WHERE gerna_cars.id = gerna_sales.model AND gerna_cars.id = ${carID}`;
 
@@ -173,7 +178,6 @@ app.post("/get-sales", (req, res) => {
       console.log(err);
     } else {
       res.send(result);
-      console.log(result);
     }
   });
 });
@@ -193,6 +197,7 @@ app.get("/recent-sales", (req, res) => {
 app.get("/total-income", (req, res) => {
   const getTotalIncome = `SELECT sum(gerna_cars.price) as totalIncome FROM gerna_sales, gerna_employees, gerna_cars WHERE gerna_cars.id = gerna_sales.model AND gerna_sales.saler = gerna_employees.id`;
 
+
   db.query(getTotalIncome, (err, result) => {
     if (err) {
       console.log(err);
@@ -210,6 +215,7 @@ app.get("/recent-income", (req, res) => {
       console.log(err);
     } else {
       res.send(result);
+      console.log(result)
     }
   });
 });
@@ -274,6 +280,7 @@ app.post("/new-sale", (req, res) => {
     if (err) {
       console.log(err);
     } else {
+      console.log(result)
       res.send(result);
     }
   });
@@ -302,20 +309,18 @@ app.post("/login", (req, res) => {
     if (err) {
       console.log(err);
     } else {
-      console.log(result);
       if (result.length > 0) {
         const isPasswordMatch = bcrypt.compareSync(
           userData.password,
           result[0].password
         );
-
+          console.log(userData.password)
         if (isPasswordMatch === true) {
           const auth = {
             authenticated: true,
             authUser: userData.email,
             role: result[0].role,
           };
-
           res.send(auth);
         }
       }
@@ -354,6 +359,7 @@ app.post("/get-messages", (req, res) => {
       console.log(err);
     } else {
       res.send(result);
+      console.log(result)
     }
   });
 });
@@ -370,6 +376,6 @@ app.get("/news", (req, res) => {
   });
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 app.listen(port);
