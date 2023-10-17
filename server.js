@@ -2,22 +2,27 @@ const express = require("express");
 const app = express();
 const mysql = require("mysql");
 const cors = require("cors");
-// require("dotenv").config();
+require('dotenv').config()
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
+const path = require('path');
 
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/static', express.static(path.join(__dirname, 'client/build')));
+app.use(express.static('../build'));
+app.get('*', (req, res)=> {
+  const index = path.join(__dirname, '/', '../build', 'index.html' );
+  res.sendFile(index);
+});
 
 const db_config = {
-   host: process.env.HOST,
-   user: process.env.USER,
-   password: process.env.PASSWORD,
-   database: process.env.DB,
- };
+  host: process.env.HOST,
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  database: process.env.DB,
+};
 
 let db;
 
@@ -165,7 +170,7 @@ app.get("/get-cars", (req, res) => {
 
 app.post("/get-sales", (req, res) => {
   const carID = req.body.data;
-  console.log(carID)
+  console.log(carID);
 
   const getSales = `SELECT count(gerna_cars.id) as sales FROM gerna_cars, gerna_sales WHERE gerna_cars.id = gerna_sales.model AND gerna_cars.id = ${carID}`;
 
@@ -193,7 +198,6 @@ app.get("/recent-sales", (req, res) => {
 app.get("/total-income", (req, res) => {
   const getTotalIncome = `SELECT sum(gerna_cars.price) as totalIncome FROM gerna_sales, gerna_employees, gerna_cars WHERE gerna_cars.id = gerna_sales.model AND gerna_sales.saler = gerna_employees.id`;
 
-
   db.query(getTotalIncome, (err, result) => {
     if (err) {
       console.log(err);
@@ -211,7 +215,7 @@ app.get("/recent-income", (req, res) => {
       console.log(err);
     } else {
       res.send(result);
-      console.log(result)
+      console.log(result);
     }
   });
 });
@@ -276,7 +280,7 @@ app.post("/new-sale", (req, res) => {
     if (err) {
       console.log(err);
     } else {
-      console.log(result)
+      console.log(result);
       res.send(result);
     }
   });
@@ -310,7 +314,7 @@ app.post("/login", (req, res) => {
           userData.password,
           result[0].password
         );
-          console.log(userData.password)
+        console.log(userData.password);
         if (isPasswordMatch === true) {
           const auth = {
             authenticated: true,
@@ -355,7 +359,7 @@ app.post("/get-messages", (req, res) => {
       console.log(err);
     } else {
       res.send(result);
-      console.log(result)
+      console.log(result);
     }
   });
 });
