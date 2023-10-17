@@ -10,11 +10,7 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.static('../build'));
-app.get('*', (req, res)=> {
-  const index = path.join(__dirname, '/', '../build', 'index.html' );
-  res.sendFile(index);
-});
+app.use('/static', express.static(path.join(__dirname, 'client/build')));
 
 const db_config = {
    host: process.env.HOST,
