@@ -10,18 +10,12 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// const db_config = {
-//   host: process.env.HOST,
-//   user: process.env.USER,
-//   password: process.env.PASSWORD,
-//   database: process.env.DB,
-// };
-
 const db_config = {
-  host: 'localhost',
-  user: 'root',
-  database: 'lepa70xfj1',
-}
+   host: process.env.HOST,
+   user: process.env.USER,
+   password: process.env.PASSWORD,
+   database: process.env.DB,
+ };
 
 let db;
 
